@@ -8,6 +8,12 @@ a github token having gists scope access
 
 settings -> developer settings -> personal access token -> generate new token -> select gists and generate
 
+copy the token and  
+
+```bash
+echo <token> > gist_token
+```
+
 ## usage
 
 ```

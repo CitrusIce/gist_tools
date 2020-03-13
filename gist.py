@@ -3,9 +3,10 @@ import json
 import base64
 import argparse
 
-debug = False
+debug = True
 api_url = "https://api.github.com/gists"
-token = ""
+with open('gist_token', 'r') as f:
+    token = f.read().replace('\r','').replace('\n','')
 header = {"Authorization": "token " + token}
 
 
@@ -14,13 +15,15 @@ def create_gist(filename, content):
     d = {
         "description": "None",
         "public": True,
-        "files": {filename: {"content": content,},},
+        "files": {filename: {"content": content}}
     }
     r = requests.post(api_url, headers=header, data=json.dumps(d))
-    data = json.loads(r.text)
     if debug:
-        print(data)
-        print(data["files"][filename]["raw_url"])
+        print(r.text)
+    data = json.loads(r.text)
+    # if debug:
+    #     print(data)
+    #     print(data["files"][filename]["raw_url"])
     return data
 
 
@@ -51,7 +54,7 @@ if __name__ == "__main__":
     with open(args.filename, "rb") as f:
         byte = f.read()
     if args.b:
-        content = base64.b64encode(byte)
+        content = base64.b64encode(byte).decode()
     else:
         content = byte.decode()
     if args.n:
